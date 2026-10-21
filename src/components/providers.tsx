@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@teispace/next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { useState } from "react";
 
@@ -25,6 +25,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
+      storage="local"
     >
       <QueryClientProvider client={queryClient}>
         {children}

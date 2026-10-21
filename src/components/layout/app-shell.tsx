@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Stethoscope, Users, Menu, Moon, Sun, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
