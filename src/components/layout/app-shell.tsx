@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { LayoutDashboard, Stethoscope, Users, Menu, Moon, Sun, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -18,8 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import Cookies from "js-cookie";
-import { TOKEN_COOKIE_NAME } from "@/lib/api";
+import { useAuth } from "@/hooks/use-auth";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -30,6 +29,13 @@ const navItems = [
 type AppShellProps = {
   children: ReactNode;
 };
+
+function getInitials(name?: string) {
+  if (!name) return "AD";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -72,13 +78,12 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppShell({ children }: AppShellProps) {
   const { setTheme } = useTheme();
-  const router = useRouter();
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    Cookies.remove(TOKEN_COOKIE_NAME);
-    router.replace("/login");
-  };
+  const displayName = user?.name || "Admin";
+  const displayEmail = user?.email || "admin@doctortracker.com";
+  const initials = getInitials(user?.name || "Admin");
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,42 +115,32 @@ export function AppShell({ children }: AppShellProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback>AD</AvatarFallback>
+                      <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                     <div className="hidden flex-col items-start text-left sm:flex">
-                      <span className="text-sm leading-none">Admin</span>
-                      <span className="text-xs text-muted-foreground">
-                        admin@doctortracker.com
-                      </span>
+                      <span className="text-sm leading-none">{displayName}</span>
+                      <span className="text-xs text-muted-foreground">{displayEmail}</span>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">Admin</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        admin@doctortracker.com
-                      </p>
+                      <p className="text-sm font-medium leading-none">{displayName}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{displayEmail}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </DropdownMenuItem>

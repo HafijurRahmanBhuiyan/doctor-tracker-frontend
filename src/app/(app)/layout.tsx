@@ -1,9 +1,14 @@
 import { AppShell } from "@/components/layout/app-shell";
+import { AuthGate } from "@/components/auth/auth-gate";
 
 export default function AppGroupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  return (
+    <AppShell>
+      <AuthGate>{children}</AuthGate>
+    </AppShell>
+  );
 }
