@@ -52,7 +52,7 @@ The app runs on `http://localhost:3000`; set `NEXT_PUBLIC_API_URL=http://localho
 
 ```mermaid
 flowchart LR
-  B[Browser] -->|URL and UI state| N[Next.js pages and proxy]
+  B[Browser] -->|Page requests| N[Next.js pages and proxy]
   N -->|Axios REST request with Bearer JWT| E[Express REST API /api/v1]
   E -->|Mongoose reads and aggregations| M[(MongoDB)]
   M --> E
@@ -120,14 +120,26 @@ For list pages, query-string state drives the TanStack Query key and REST reques
 
 ### Mobile
 
-![Dashboard at mobile size](docs/screenshots/dashboard-mobile.png)
-*Dashboard (mobile).*
+Mobile views at a 375px viewport:
 
-![Doctors list at mobile size](docs/screenshots/doctors-mobile.png)
-*Doctors list (mobile).*
-
-![Patients list at mobile size](docs/screenshots/patients-mobile.png)
-*Patients list (mobile).*
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/dashboard-mobile.png" alt="Dashboard on a 375px mobile viewport" width="100%">
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/doctors-mobile.png" alt="Doctors list on a 375px mobile viewport" width="100%">
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/patients-mobile.png" alt="Patients list on a 375px mobile viewport" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Dashboard</sub></td>
+    <td align="center"><sub>Doctors</sub></td>
+    <td align="center"><sub>Patients</sub></td>
+  </tr>
+</table>
 
 ## Features
 
