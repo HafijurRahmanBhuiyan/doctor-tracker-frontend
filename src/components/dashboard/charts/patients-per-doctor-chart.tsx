@@ -12,6 +12,8 @@ import {
 } from "recharts";
 import { useReducedMotion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-media-query";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { DashboardPatientPerDoctor } from "@/types";
 import { TooltipShell, type ChartTooltipProps } from "./chart-tooltip";
 import { useChartPalette } from "./use-chart-palette";
@@ -50,6 +52,7 @@ export const PatientsPerDoctorChart = memo(function PatientsPerDoctorChart({
   data,
 }: PatientsPerDoctorChartProps) {
   const palette = useChartPalette();
+  const router = useRouter();
   const isMobile = useIsMobile();
   const reduceMotion = useReducedMotion() === true;
 
@@ -111,9 +114,27 @@ export const PatientsPerDoctorChart = memo(function PatientsPerDoctorChart({
             barSize={16}
             isAnimationActive={!reduceMotion}
             animationDuration={600}
+            cursor="pointer"
+            onClick={(entry) => {
+              const point = (entry as { payload?: ChartPoint }).payload;
+              if (point?.doctorId) router.push(`/doctors/${point.doctorId}`);
+            }}
           />
         </BarChart>
       </ResponsiveContainer>
+      <ul className="sr-only focus-within:not-sr-only focus-within:mt-2 focus-within:grid focus-within:grid-cols-2 focus-within:gap-2">
+        {data.map((doctor) => (
+          <li key={doctor.doctorId}>
+            <Link
+              href={`/doctors/${doctor.doctorId}`}
+              className="flex min-h-11 items-center justify-between gap-2 rounded-md px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="truncate">{doctor.name}</span>
+              <span className="shrink-0 text-muted-foreground">{doctor.count}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 });

@@ -17,7 +17,7 @@ type SearchInputProps = {
 export function SearchInput({
   value = "",
   onChange,
-  placeholder = "Search...",
+  placeholder = "Search by name, email or phone",
   delay = 400,
   className,
 }: SearchInputProps) {

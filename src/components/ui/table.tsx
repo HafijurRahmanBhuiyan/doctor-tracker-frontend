@@ -73,6 +73,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
         className
       )}
       {...props}
+      scope={props.scope ?? "col"}
     />
   )
 }

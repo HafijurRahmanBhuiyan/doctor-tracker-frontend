@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Stethoscope, Users, Menu, Moon, Sun, LogOut } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "@teispace/next-themes";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -53,14 +53,15 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       <nav className="flex flex-1 flex-col gap-1 px-3">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = pathname.startsWith(item.href);
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 active
                   ? "bg-accent text-accent-foreground"
                   : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
@@ -77,6 +78,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: AppShellProps) {
+  const reduceMotion = useReducedMotion();
   const { setTheme } = useTheme();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
@@ -94,7 +96,7 @@ export function AppShell({ children }: AppShellProps) {
         <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:px-6">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation menu">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Open sidebar</span>
               </Button>
@@ -149,11 +151,17 @@ export function AppShell({ children }: AppShellProps) {
             </div>
           </div>
         </header>
-        <main className="p-4 sm:p-6 lg:p-8">
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-3 text-foreground shadow-lg focus:not-sr-only focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Skip to main content
+        </a>
+        <main id="main-content" tabIndex={-1} className="p-4 focus:outline-none sm:p-6 lg:p-8">
           <motion.div
-            initial={{ opacity: 0, y: 4 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: reduceMotion ? 0 : 0.2, ease: "easeOut" }}
             className="mx-auto w-full max-w-7xl"
           >
             {children}

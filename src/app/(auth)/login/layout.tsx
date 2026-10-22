@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign in | Doctor Tracker",
+  title: "Sign in",
 };
 
 export default function LoginLayout({

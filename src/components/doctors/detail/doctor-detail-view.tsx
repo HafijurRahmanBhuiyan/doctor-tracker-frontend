@@ -1,8 +1,10 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, Plus, SearchX, Users } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Plus, SearchX, Users } from "lucide-react";
 import { Breadcrumbs } from "@/components/common/breadcrumbs";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { CustomPagination } from "@/components/common/pagination";
@@ -10,7 +12,6 @@ import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
 import { TableSkeleton } from "@/components/common/table-skeleton";
 import { SearchInput } from "@/components/common/search-input";
-import { AddPatientDialog } from "@/components/patients/add-patient-dialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,6 @@ import {
   useRemoveDoctorPatient,
 } from "@/hooks/use-doctors";
 import { useUrlState } from "@/hooks/use-url-state";
-import { DoctorFormDialog } from "@/components/doctors/doctor-form-dialog";
-import { DoctorDeleteDialog } from "@/components/doctors/doctor-delete-dialog";
 import { DoctorDetailSkeleton } from "@/components/doctors/doctors-skeleton";
 import { DoctorNotFound } from "./doctor-not-found";
 import { DoctorProfileHeader } from "./doctor-profile-header";
@@ -33,6 +32,16 @@ import {
   DoctorPatientList,
 } from "./doctor-patient-list";
 import type { DoctorPatient } from "@/types";
+
+const AddPatientDialog = dynamic(
+  () => import("@/components/patients/add-patient-dialog").then((module) => module.AddPatientDialog)
+);
+const DoctorFormDialog = dynamic(
+  () => import("@/components/doctors/doctor-form-dialog").then((module) => module.DoctorFormDialog)
+);
+const DoctorDeleteDialog = dynamic(
+  () => import("@/components/doctors/doctor-delete-dialog").then((module) => module.DoctorDeleteDialog)
+);
 
 /**
  * URL params of the patients section. The names do not clash with any other
@@ -211,6 +220,12 @@ export function DoctorDetailView({ doctorId }: { doctorId: string }) {
             Everyone assigned to {doctor.name}. They are removed with the doctor
             as well.
           </CardDescription>
+          <Button variant="outline" size="sm" asChild className="mt-3">
+            <Link href={`/patients?doctor=${doctorId}`}>
+              View all patients
+              <ExternalLink className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
         </CardHeader>
 
         <CardContent className="space-y-4">
@@ -218,7 +233,7 @@ export function DoctorDetailView({ doctorId }: { doctorId: string }) {
             <SearchInput
               value={values.pq}
               onChange={handlePatientSearchChange}
-              placeholder="Search by name or condition"
+              placeholder="Search by name, email, phone or condition"
               className="w-full sm:w-64"
             />
             <Button onClick={() => setAddPatientOpen(true)}>

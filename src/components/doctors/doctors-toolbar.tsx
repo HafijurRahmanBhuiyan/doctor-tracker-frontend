@@ -65,7 +65,7 @@ export function DoctorsToolbar({
       <SearchInput
         value={search}
         onChange={onSearchChange}
-        placeholder="Search by name or email"
+        placeholder="Search by name, email or phone"
         className="w-full sm:w-64"
       />
 

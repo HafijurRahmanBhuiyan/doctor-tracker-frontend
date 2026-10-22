@@ -179,7 +179,7 @@ export function DoctorPicker({
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search doctors..."
+            placeholder="Search doctors by name, email or phone"
             aria-label="Search doctors"
             className="h-8 pl-8"
           />

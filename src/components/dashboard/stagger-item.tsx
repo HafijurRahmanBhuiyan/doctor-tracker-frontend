@@ -26,7 +26,7 @@ export function StaggerItem({ index, className, children }: StaggerItemProps) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 8 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: "easeOut", delay: index * 0.05 }}
     >

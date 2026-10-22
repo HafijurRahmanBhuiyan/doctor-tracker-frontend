@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import { Loader2, Plus, SearchX, UserRound } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { PageHeader } from "@/components/common/page-header";
@@ -17,8 +18,6 @@ import { usePatientFilterOptions, usePatients } from "@/hooks/use-patients";
 import { useUrlState } from "@/hooks/use-url-state";
 import { PatientsToolbar } from "./patients-toolbar";
 import { PatientsCardList, PatientsTable } from "./patients-list";
-import { PatientDeleteDialog } from "./patient-delete-dialog";
-import { PatientFormDialog } from "./patient-form-dialog";
 import type {
   Gender,
   PatientListParams,
@@ -26,6 +25,13 @@ import type {
   PatientSortBy,
   PatientWithDoctor,
 } from "@/types";
+
+const PatientFormDialog = dynamic(
+  () => import("./patient-form-dialog").then((module) => module.PatientFormDialog)
+);
+const PatientDeleteDialog = dynamic(
+  () => import("./patient-delete-dialog").then((module) => module.PatientDeleteDialog)
+);
 
 type PatientsUrlState = {
   search: string;

@@ -110,7 +110,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <a
+        href="#main-content"
+        className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-3 text-foreground shadow-lg focus:not-sr-only focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        Skip to main content
+      </a>
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-background focus:outline-none">
       <div className="grid min-h-screen lg:grid-cols-2">
         <div className="relative hidden overflow-hidden bg-gradient-to-br from-teal-600 via-emerald-600 to-teal-700 lg:flex lg:flex-col lg:justify-between">
           <div className="absolute inset-0">
@@ -171,7 +178,7 @@ function LoginForm() {
               </div>
             </div>
           </div>
-          <div className="relative z-10 p-10 text-sm text-white/60">© {new Date().getFullYear()} Doctor Tracker</div>
+          <div className="relative z-10 p-10 text-sm text-white/60">© Doctor Tracker</div>
         </div>
         <div className="flex flex-col items-center justify-center px-6 py-10">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
@@ -209,7 +216,7 @@ function LoginForm() {
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Input id="password" type={showPassword ? "text" : "password"} placeholder="Enter your password" className="pr-10" {...register("password")} />
-                    <Button type="button" variant="ghost" size="icon" className="absolute right-0.5 top-0.5 h-8 w-8" onClick={() => setShowPassword((p) => !p)} aria-label={showPassword ? "Hide password" : "Show password"}>
+                    <Button type="button" variant="ghost" size="icon" className="absolute right-0.5 top-0.5" onClick={() => setShowPassword((p) => !p)} aria-label={showPassword ? "Hide password" : "Show password"}>
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -230,7 +237,8 @@ function LoginForm() {
           </Card>
         </div>
       </div>
-    </div>
+      </main>
+    </>
   );
 }
 

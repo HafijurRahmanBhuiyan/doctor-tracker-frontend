@@ -59,18 +59,18 @@ export function CustomPagination({
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground" role="status" aria-live="polite">
         Showing {start}-{end} of {totalItems}
       </div>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
         {onPageSizeChange && (
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Rows per page</span>
+              <span id="rows-per-page-label" className="text-muted-foreground">Rows per page</span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => onPageSizeChange(Number(v))}
             >
-              <SelectTrigger className="h-8 w-20">
+              <SelectTrigger className="h-8 w-20" aria-labelledby="rows-per-page-label">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

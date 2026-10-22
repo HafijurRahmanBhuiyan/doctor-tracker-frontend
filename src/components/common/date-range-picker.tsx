@@ -1,12 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import dynamic from "next/dynamic";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+
+const Calendar = dynamic(
+  () => import("@/components/ui/calendar").then((module) => module.Calendar),
+  { loading: () => <div className="h-[280px] w-[320px] animate-pulse rounded-md bg-muted" /> }
+);
 
 type DateRangePickerProps = {
   value?: DateRange;

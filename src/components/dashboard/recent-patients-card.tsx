@@ -63,7 +63,12 @@ export const RecentPatientsCard = memo(function RecentPatientsCard({
               </Avatar>
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{patient.name}</p>
+                <Link
+                  href={`/patients?search=${encodeURIComponent(patient.name)}`}
+                  className="block truncate rounded-sm text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  {patient.name}
+                </Link>
                 <p className="truncate text-xs text-muted-foreground">
                   {patient.doctorName ?? "Unassigned"}
                 </p>
