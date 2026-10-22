@@ -2,13 +2,16 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchDashboardStats } from "@/services/dashboard.service";
+import { dashboardKeys } from "@/lib/query-keys";
 import type { DashboardDateRange, DashboardStats } from "@/types";
-
-export const DASHBOARD_STATS_QUERY_KEY = "dashboard-stats";
 
 /** Stable query key: the active range is part of the key. */
 export function dashboardStatsQueryKey(range?: DashboardDateRange) {
-  return [DASHBOARD_STATS_QUERY_KEY, range?.from ?? null, range?.to ?? null] as const;
+  return [
+    ...dashboardKeys.stats(),
+    range?.from ?? null,
+    range?.to ?? null,
+  ] as const;
 }
 
 export function useDashboardStats(range?: DashboardDateRange) {

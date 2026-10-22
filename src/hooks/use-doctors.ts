@@ -42,13 +42,22 @@ let optimisticPatientId = 0;
 /* Queries                                                             */
 /* ------------------------------------------------------------------ */
 
-/** `GET /doctors` — the paginated doctor list. */
-export function useDoctors(params: DoctorListParams) {
+/**
+ * `GET /doctors` — the paginated doctor list.
+ *
+ * `options.enabled` allows a consumer to postpone the request (the doctor
+ * picker only loads the doctors when its popover is opened).
+ */
+export function useDoctors(
+  params: DoctorListParams,
+  options?: { enabled?: boolean }
+) {
   return useQuery({
     queryKey: doctorKeys.list(params),
     queryFn: () => fetchDoctors(params),
     // Keeps the previous page visible while the next one is loading.
     placeholderData: keepPreviousData,
+    enabled: options?.enabled ?? true,
   });
 }
 

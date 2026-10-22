@@ -1,4 +1,8 @@
-import type { DoctorListParams, DoctorPatientsParams } from "@/types";
+import type {
+  DoctorListParams,
+  DoctorPatientsParams,
+  PatientListParams,
+} from "@/types";
 
 /**
  * Central query key factory for the doctors feature.
@@ -22,4 +26,30 @@ export const doctorKeys = {
     [...doctorKeys.patients(), doctorId, "list"] as const,
   patientList: (doctorId: string, params: DoctorPatientsParams) =>
     [...doctorKeys.patientLists(doctorId), params] as const,
+};
+
+/**
+ * Central query key factory for the patients feature.
+ *
+ * - `patientKeys.lists()` -> every patient list (any filter combination)
+ * - `patientKeys.details()` -> every single patient
+ * - `patientKeys.filterOptions()` -> the values of the condition filter
+ */
+export const patientKeys = {
+  all: ["patients"] as const,
+  lists: () => [...patientKeys.all, "list"] as const,
+  list: (params: PatientListParams) => [...patientKeys.lists(), params] as const,
+  details: () => [...patientKeys.all, "detail"] as const,
+  detail: (id: string) => [...patientKeys.details(), id] as const,
+  filterOptions: () => [...patientKeys.all, "filter-options"] as const,
+};
+
+/**
+ * Central query key factory for the dashboard.
+ *
+ * - `dashboardKeys.stats()` -> the aggregated dashboard statistics
+ */
+export const dashboardKeys = {
+  all: ["dashboard"] as const,
+  stats: () => [...dashboardKeys.all, "stats"] as const,
 };

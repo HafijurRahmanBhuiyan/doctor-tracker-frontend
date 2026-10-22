@@ -109,6 +109,51 @@ export type DoctorPatient = Omit<Patient, "doctor"> & {
   doctor: string;
 };
 
+/**
+ * A patient of the patients list / detail. The backend populates the doctor,
+ * so it always carries the name and the specialization of the doctor.
+ */
+export type PatientWithDoctor = Omit<Patient, "doctor"> & {
+  doctor: PatientDoctor;
+};
+
+/** The `sortBy` values the backend accepts for the patients list. */
+export type PatientSortBy = "createdAt" | "name" | "age" | "condition";
+
+/** Sort options offered by the patients list. */
+export type PatientSort =
+  | "newest"
+  | "oldest"
+  | "name-asc"
+  | "name-desc"
+  | "age-asc"
+  | "age-desc"
+  | "condition";
+
+/** Query parameters accepted by `GET /patients`. */
+export type PatientListParams = {
+  page?: number;
+  limit?: number;
+  /** Matched against the name and the condition. */
+  search?: string;
+  /** Exact condition. */
+  condition?: string;
+  /** ObjectId of the doctor the patient is assigned to. */
+  doctor?: string;
+  gender?: Gender;
+  /** YYYY-MM-DD */
+  from?: string;
+  /** YYYY-MM-DD */
+  to?: string;
+  sortBy?: PatientSortBy;
+  order?: "asc" | "desc";
+};
+
+/** Options used to populate the condition filter. */
+export type PatientFilterOptions = {
+  conditions: string[];
+};
+
 /** A list payload together with its pagination meta. */
 export type PaginatedData<T> = {
   data: T[];

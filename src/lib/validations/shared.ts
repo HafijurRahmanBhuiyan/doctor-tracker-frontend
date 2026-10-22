@@ -43,3 +43,18 @@ export const optionalEmailSchema = z.union([
 export const genderSchema = z.enum(["male", "female", "other"], {
   error: "Select a gender",
 });
+
+/**
+ * The shape of a MongoDB ObjectId.
+ *
+ * The backend validates the `doctor` / `doctorId` params with the same
+ * pattern (`backend/src/validators/patient.ts`), so an invalid id is
+ * rejected with a 400 instead of an empty result.
+ */
+export const OBJECT_ID_PATTERN = /^[0-9a-fA-F]{24}$/;
+
+/** True when the value looks like a MongoDB ObjectId. */
+export function isObjectId(value?: string | null): boolean {
+  if (!value) return false;
+  return OBJECT_ID_PATTERN.test(value.trim());
+}

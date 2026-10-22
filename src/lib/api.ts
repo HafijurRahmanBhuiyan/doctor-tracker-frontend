@@ -59,6 +59,17 @@ export function getErrorStatus(error: unknown): number | undefined {
   return undefined;
 }
 
+/**
+ * A payload plus the message the backend sent with it.
+ *
+ * Shared by every service, so the mutation hooks can show the message of the
+ * backend instead of a hard coded one.
+ */
+export type ServiceResult<T> = {
+  data: T;
+  message: string;
+};
+
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data as ApiResponse<unknown> | undefined;

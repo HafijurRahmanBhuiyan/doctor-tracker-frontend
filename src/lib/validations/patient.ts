@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   genderSchema,
+  OBJECT_ID_PATTERN,
   optionalEmailSchema,
   phoneSchema,
 } from "./shared";
@@ -51,3 +52,28 @@ export type PatientFormInput = z.input<typeof patientFormSchema>;
 
 /** The parsed values that are sent to the API. */
 export type PatientFormValues = z.output<typeof patientFormSchema>;
+
+/**
+ * The patient form of the patients page.
+ *
+ * Same rules as `patientFormSchema` plus the doctor the patient is assigned
+ * to. The backend expects the doctor as an ObjectId (`doctorId`) and answers
+ * with a 404 ("Doctor not found") when it does not exist.
+ */
+export const patientFormSchemaWithDoctor = patientFormSchema.extend({
+  doctorId: z
+    .string()
+    .trim()
+    .min(1, "Select a doctor")
+    .regex(OBJECT_ID_PATTERN, "Select a valid doctor"),
+});
+
+/** The form values while editing (the age and the email are plain strings). */
+export type PatientFormInputWithDoctor = z.input<
+  typeof patientFormSchemaWithDoctor
+>;
+
+/** The parsed values that are sent to the API. */
+export type PatientFormValuesWithDoctor = z.output<
+  typeof patientFormSchemaWithDoctor
+>;

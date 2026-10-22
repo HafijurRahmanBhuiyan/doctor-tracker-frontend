@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@teispace/next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { useIsMobile } from "@/hooks/use-media-query";
 import { useState } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       })
   );
 
+  // The toasts sit in the top right corner on desktop and in the top center
+  // on mobile, so they never cover the pagination or the row actions.
+  const isMobile = useIsMobile();
+
   return (
     <ThemeProvider
       attribute="class"
@@ -29,7 +34,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <QueryClientProvider client={queryClient}>
         {children}
-        <Toaster richColors />
+        <Toaster
+          richColors
+          position={isMobile ? "top-center" : "top-right"}
+          duration={4000}
+          closeButton
+        />
       </QueryClientProvider>
     </ThemeProvider>
   );

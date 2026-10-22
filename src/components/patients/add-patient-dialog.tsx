@@ -16,13 +16,13 @@ import {
 import { Form } from "@/components/ui/form";
 import { useAddDoctorPatient } from "@/hooks/use-doctors";
 import {
-  patientFormSchema,
-  type PatientFormInput,
-  type PatientFormValues,
+  patientFormSchemaWithDoctor,
+  type PatientFormInputWithDoctor,
+  type PatientFormValuesWithDoctor,
 } from "@/lib/validations/patient";
 import { PatientFormFields } from "./patient-form-fields";
 
-const EMPTY_PATIENT: PatientFormInput = {
+const EMPTY_PATIENT: PatientFormInputWithDoctor = {
   name: "",
   age: "",
   gender: "male",
@@ -30,6 +30,7 @@ const EMPTY_PATIENT: PatientFormInput = {
   email: "",
   condition: "",
   notes: "",
+  doctorId: "",
 };
 
 type AddPatientDialogProps = {
@@ -47,16 +48,21 @@ export function AddPatientDialog({
   const addMutation = useAddDoctorPatient(doctorId);
   const saving = addMutation.isPending;
 
-  const form = useForm<PatientFormInput, unknown, PatientFormValues>({
-    resolver: zodResolver(patientFormSchema),
+  const form = useForm<
+    PatientFormInputWithDoctor,
+    unknown,
+    PatientFormValuesWithDoctor
+  >({
+    resolver: zodResolver(patientFormSchemaWithDoctor),
     defaultValues: EMPTY_PATIENT,
     mode: "onSubmit",
   });
 
-  // Always start from an empty form when the dialog is opened.
+  // Always start from an empty form when the dialog is opened. The doctor is
+  // not part of the form: it is the doctor of the page the dialog is opened on.
   useEffect(() => {
-    if (open) form.reset(EMPTY_PATIENT);
-  }, [form, open]);
+    if (open) form.reset({ ...EMPTY_PATIENT, doctorId });
+  }, [doctorId, form, open]);
 
   const handleSubmit = form.handleSubmit(async (values) => {
     try {

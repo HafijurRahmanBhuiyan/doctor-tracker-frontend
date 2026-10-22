@@ -21,15 +21,15 @@ import type {
   Gender,
 } from "@/types";
 import type {
-  PatientFormInput,
-  PatientFormValues,
+  PatientFormInputWithDoctor,
+  PatientFormValuesWithDoctor,
 } from "@/lib/validations/patient";
 
 /** The typed form object a host page needs to use `PatientFormFields`. */
 export type PatientFormReturn = UseFormReturn<
-  PatientFormInput,
+  PatientFormInputWithDoctor,
   unknown,
-  PatientFormValues
+  PatientFormValuesWithDoctor
 >;
 
 const GENDER_OPTIONS: { value: Gender; label: string }[] = [

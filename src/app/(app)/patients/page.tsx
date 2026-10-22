@@ -1,10 +1,11 @@
+import { Suspense } from "react";
+import { PatientsView } from "@/components/patients/patients-view";
+import { PatientsPageSkeleton } from "@/components/patients/patients-skeleton";
+
 export default function PatientsPage() {
   return (
-    <div className="space-y-2">
-      <h1 className="text-2xl font-semibold tracking-tight">Patients</h1>
-      <p className="text-muted-foreground">
-        Patient management coming soon.
-      </p>
-    </div>
+    <Suspense fallback={<PatientsPageSkeleton />}>
+      <PatientsView />
+    </Suspense>
   );
 }

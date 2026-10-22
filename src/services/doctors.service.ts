@@ -1,4 +1,4 @@
-import api, { type ApiResponse } from "@/lib/api";
+import api, { type ApiResponse, type ServiceResult } from "@/lib/api";
 import type {
   Doctor,
   DoctorFilterOptions,
@@ -12,11 +12,13 @@ import type {
 import type { DoctorFormValues } from "@/lib/validations/doctor";
 import type { PatientFormValues } from "@/lib/validations/patient";
 
-/** A payload plus the message the backend sent with it. */
-export type ServiceResult<T> = {
-  data: T;
-  message: string;
-};
+/**
+ * A payload plus the message the backend sent with it.
+ *
+ * The type lives in `@/lib/api` (it is shared with the patients service) and
+ * is re-exported here to keep the existing import path working.
+ */
+export type { ServiceResult };
 
 function toQuery(params: Record<string, string | number | undefined>) {
   const query: Record<string, string | number> = {};
