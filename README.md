@@ -6,8 +6,8 @@ The frontend is a responsive admin portal for reviewing doctors, patients, and d
 
 **Live demo**
 
-- Frontend: `<LIVE_FRONTEND_URL>`
-- Backend API: `<LIVE_BACKEND_URL>`
+- Frontend: https://doctor-tracker-frontend-iota.vercel.app
+- Backend API: https://doctor-tracker-api-3je6.onrender.com/api/v1/health
 - [Backend repository](https://github.com/HafijurRahmanBhuiyan/doctor-tracker-backend)
 - [Root Compose repository](https://github.com/HafijurRahmanBhuiyan/doctor-tracker)
 
