@@ -7,6 +7,7 @@
  * first client render differ, so a fixed locale is used everywhere.
  */
 export const DEFAULT_LOCALE = "en-US";
+export const APP_TIMEZONE = "Asia/Dhaka";
 
 const numberFormatter = new Intl.NumberFormat(DEFAULT_LOCALE);
 
@@ -14,7 +15,7 @@ const absoluteDateFormatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
   day: "numeric",
   year: "numeric",
-  timeZone: "UTC",
+  timeZone: APP_TIMEZONE,
 });
 
 /** Formats a number with the app locale (e.g. `1,234`). */
@@ -23,8 +24,8 @@ export function formatNumber(value: number) {
 }
 
 /**
- * Formats an ISO date with a fixed locale *and* time zone, so the result is
- * identical on the server and in the browser (e.g. `Sep 21, 2026`).
+ * Formats an ISO date with a fixed locale *and* time zone (Asia/Dhaka, UTC+6),
+ * so the result is identical on the server and in the browser (e.g. `Oct 22, 2026`).
  */
 export function formatAbsoluteDate(value: string | Date) {
   return absoluteDateFormatter.format(new Date(value));

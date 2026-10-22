@@ -21,6 +21,12 @@ export type User = {
   role: UserRole;
 };
 
+export type Gender = "male" | "female" | "other";
+
+/**
+ * A doctor as returned by the create / update endpoints.
+ * Those responses do not carry a patient count.
+ */
 export type Doctor = {
   _id: string;
   name: string;
@@ -28,9 +34,51 @@ export type Doctor = {
   hospital: string;
   phone: string;
   email: string;
-  patientCount?: number;
+  /** ISO date string */
   createdAt: string;
-  updatedAt?: string;
+  /** ISO date string */
+  updatedAt: string;
+};
+
+/**
+ * A doctor as returned by the list and the detail endpoints.
+ * Both add the number of patients assigned to the doctor.
+ */
+export type DoctorWithPatientCount = Doctor & {
+  patientCount: number;
+};
+
+/** Options used to populate the specialization / hospital filters. */
+export type DoctorFilterOptions = {
+  specializations: string[];
+  hospitals: string[];
+};
+
+/** Sort options offered by the doctors list. */
+export type DoctorSort = "newest" | "oldest" | "name-asc" | "name-desc";
+
+/** Query parameters accepted by `GET /doctors`. */
+export type DoctorListParams = {
+  page?: number;
+  limit?: number;
+  /** Matched against the name and the email. */
+  search?: string;
+  specialization?: string;
+  hospital?: string;
+  /** YYYY-MM-DD */
+  from?: string;
+  /** YYYY-MM-DD */
+  to?: string;
+  sortBy?: "createdAt" | "name";
+  order?: "asc" | "desc";
+};
+
+/** Query parameters accepted by `GET /doctors/:id/patients`. */
+export type DoctorPatientsParams = {
+  page?: number;
+  limit?: number;
+  /** Matched against the name and the condition. */
+  search?: string;
 };
 
 export type PatientDoctor = {
@@ -43,7 +91,7 @@ export type Patient = {
   _id: string;
   name: string;
   age: number;
-  gender: "male" | "female" | "other";
+  gender: Gender;
   phone: string;
   email?: string;
   condition: string;
@@ -51,6 +99,20 @@ export type Patient = {
   doctor: PatientDoctor | string;
   createdAt: string;
   updatedAt?: string;
+};
+
+/**
+ * A patient of the "patients of a doctor" list. The `doctor` field is the
+ * raw ObjectId (the query is not populated), never a doctor object.
+ */
+export type DoctorPatient = Omit<Patient, "doctor"> & {
+  doctor: string;
+};
+
+/** A list payload together with its pagination meta. */
+export type PaginatedData<T> = {
+  data: T[];
+  meta: PaginationMeta;
 };
 
 /* ------------------------------------------------------------------ */

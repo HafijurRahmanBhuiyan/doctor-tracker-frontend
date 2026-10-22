@@ -51,6 +51,14 @@ export type PaginationMeta = {
   totalPages: number;
 };
 
+/** The HTTP status of a failed request (e.g. 404 or 409), if there was one. */
+export function getErrorStatus(error: unknown): number | undefined {
+  if (axios.isAxiosError(error)) {
+    return error.response?.status;
+  }
+  return undefined;
+}
+
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data as ApiResponse<unknown> | undefined;

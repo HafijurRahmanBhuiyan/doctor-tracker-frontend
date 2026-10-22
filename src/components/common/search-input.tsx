@@ -24,7 +24,18 @@ export function SearchInput({
   const [inputValue, setInputValue] = useState(value);
   const debouncedValue = useDebounce(inputValue, delay);
   const lastSynced = useRef(value);
+  const lastEmitted = useRef(debouncedValue);
 
+  // The callback is kept in a ref on purpose: a new function identity (the
+  // parent re-creates its handlers on every navigation) must not trigger a
+  // new search. Re-sending the current value would reset the pagination of
+  // the page, because a "new" search always goes back to the first page.
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  // Adopt the value when it is changed from the outside (e.g. "Clear filters").
   useEffect(() => {
     if (lastSynced.current !== value) {
       lastSynced.current = value;
@@ -32,10 +43,13 @@ export function SearchInput({
     }
   }, [value]);
 
+  // Only report an actual change of the search term.
   useEffect(() => {
-    lastSynced.current = debouncedValue;
-    onChange(debouncedValue);
-  }, [debouncedValue, onChange]);
+    if (lastEmitted.current === debouncedValue) return;
+
+    lastEmitted.current = debouncedValue;
+    onChangeRef.current(debouncedValue);
+  }, [debouncedValue]);
 
   return (
     <div className={`relative ${className ?? ""}`}>
